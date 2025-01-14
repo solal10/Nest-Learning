@@ -6,12 +6,14 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/paginati
 import { REQUEST } from '@nestjs/core';
 import { Public } from 'src/common/decorators/public.decorator';
 import { ParseIntPipe } from 'src/common/pipes/parse-int/parse-int.pipe';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
     constructor(private readonly coffeesService: CoffeesService, @Inject(REQUEST) private readonly request: Request) {
     }
+    
     
     @Public()
     @Get()
@@ -20,6 +22,7 @@ export class CoffeesController {
         return this.coffeesService.findAll(paginationQuery);
     }
 
+    @ApiForbiddenResponse({description: 'Forbidden.'})
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id:number) {
         return this.coffeesService.findOne(''+id);
