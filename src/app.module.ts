@@ -9,6 +9,9 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi'
 import { APP_PIPE } from '@nestjs/core';
 import { CommonModule } from './common/common.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ShopsController } from './shops/shops.controller';
+import { ShopsModule } from './shops/shops.module';
 
 @Module({
   imports: [
@@ -18,6 +21,7 @@ import { CommonModule } from './common/common.module';
         DATABASE_PORT: Joi.number().default(5432),
       }),
     }),
+    MongooseModule.forRoot('mongodb://root:rootpassword@localhost:27017/nest-course?authSource=admin'),
     CoffeesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -31,8 +35,10 @@ import { CommonModule } from './common/common.module';
   }),
     CoffeeRatingModule,
     DatabaseModule,
-    CommonModule],
-  controllers: [AppController],
+    CommonModule,
+    ShopsModule
+  ],
+  controllers: [AppController, ShopsController],
   providers: [AppService],
 })
 export class AppModule {}
