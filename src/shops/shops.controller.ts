@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { ShopsService } from './shops.service';
 import { Shop } from './schemas/shop.schema';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('shops') // Group all routes under "shops" in Swagger
 @Controller('shops')
@@ -9,6 +10,7 @@ export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Get all shops' })
   @ApiResponse({
     status: 200,
@@ -19,6 +21,14 @@ export class ShopsController {
     return this.shopsService.getAllShops();
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a shop by ID' })
+  @ApiParam({ name: 'id', required: true, description: 'The ID of the shop' })
+  @ApiResponse({ status: 200, description: 'Returns a shop by ID.' })
+  async getShopById(@Param('id') id: string) {
+    return await this.shopsService.getShopById(id);
+  }
+  
   @Post()
   @ApiOperation({ summary: 'Create a new shop' })
   @ApiBody({

@@ -24,6 +24,7 @@ export class Coffee{
         flavor => flavor.coffees,
         {
             cascade: true, //['insert']
+            
         }
     )
     flavors: Flavor[];
